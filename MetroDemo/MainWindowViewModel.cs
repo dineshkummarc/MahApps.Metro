@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Net;
 using System.Windows.Threading;
 using MetroDemo.Models;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace MetroDemo
 {
-    public class MainWindowViewModel
+    public class MainWindowViewModel : IDataErrorInfo
     {
         private readonly Dispatcher _dispatcher;
 
@@ -48,6 +49,28 @@ namespace MetroDemo
             set {
                 _artistName = value;
             }
+        }
+
+        public string TestErrorBinding { get; set; }
+
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = null;
+
+                if (columnName == "TestErrorBinding" && this.TestErrorBinding == "Test")
+                {
+                    error = "\"Test\" is not a valid input.";
+                }
+
+                return error;
+            }
+        }
+
+        public string Error
+        {
+            get { return null; }
         }
     }
 }
